@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Création de Lettre de Motivation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 15px;
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Créer votre Lettre de Motivation</h1>
+    <form id="lettre-form" onsubmit="genererLettre(event)">
+      <label>Nom :</label>
+      <input type="text" name="nom" required />
+
+      <label>Prénom :</label>
+      <input type="text" name="prenom" required />
+
+      <label>Email :</label>
+      <input type="email" name="email" required />
+
+      <label>Poste visé :</label>
+      <input type="text" name="poste" required />
+
+      <label>Nom de l'entreprise :</label>
+      <input type="text" name="entreprise" required />
+
+      <label>Objet de la lettre :</label>
+      <input type="text" name="objet" required />
+
+      <label>Corps de la lettre :</label>
+      <textarea name="corps" rows="6" placeholder="Décrivez pourquoi vous êtes intéressé(e) par le poste..."></textarea>
+
+      <label>Choisissez un modèle de lettre :</label>
+      <select name="modele" required>
+        <option value="formel">Formel</option>
+        <option value="creatif">Créatif</option>
+        <option value="simple">Simple</option>
+      </select>
+
+      <button type="submit">Générer ma lettre</button>
+    </form>
+  </div>
+
+  <div id="apercu-lettre" style="margin-top: 50px;"></div>
+
+  <!-- Librairie html2pdf.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <!-- Script pour générer la lettre -->
+  <script>
+    function genererLettre(event) {
+      event.preventDefault();
+
+      const form = document.getElementById("lettre-form");
+      const data = new FormData(form);
+      const modele = data.get("modele");
+
+      let lettreContent = "";
+      
+      if (modele === "formel") {
+        lettreContent = `
+          <div style="background:#fff; padding:20px; border-radius:10px;">
+            <h2>${data.get("prenom")} ${data.get("nom")}</h2>
+            <p><strong>Email :</strong> ${data.get("email")}</p>
+            <p><strong>Poste visé :</strong> ${data.get("poste")}</p>
+            <p><strong>Entreprise :</strong> ${data.get("entreprise")}</p>
+            <p><strong>Objet :</strong> ${data.get("objet")}</p>
+            <h3>Lettre de Motivation (Modèle Formel)</h3>
+            <p>Madame, Monsieur,</p>
+            <p>${data.get("corps")}</p>
+            <p>Je vous prie d'agréer, Madame, Monsieur, l'expression de mes salutations distinguées.</p>
+          </div>
+        `;
+      } else if (modele === "creatif") {
+        lettreContent = `
+          <div style="background:#f9f9f9; padding:20px; border-radius:10px; border-left: 5px solid #ff6347;">
+            <h2 style="color: #ff6347;">${data.get("prenom")} ${data.get("nom")}</h2>
+            <p><strong>Email :</strong> ${data.get("email")}</p>
+            <p><strong>Poste visé :</strong> ${data.get("poste")}</p>
+            <p><strong>Entreprise :</strong> ${data.get("entreprise")}</p>
+            <p><strong>Objet :</strong> ${data.get("objet")}</p>
+            <h3>Lettre de Motivation (Modèle Créatif)</h3>
+            <p style="font-style: italic;">Cher(e) recruteur,</p>
+            <p>${data.get("corps")}</p>
+            <p style="font-weight: bold;">Cordialement,</p>
+          </div>
+        `;
+      } else if (modele === "simple") {
+        lettreContent = `
+          <div style="background:#fff; padding:20px; border-radius:10px;">
+            <h2>${data.get("prenom")} ${data.get("nom")}</h2>
+            <p><strong>Email :</strong> ${data.get("email")}</p>
+            <p><strong>Poste visé :</strong> ${data.get("poste")}</p>
+            <p><strong>Entreprise :</strong> ${data.get("entreprise")}</p>
+            <p><strong>Objet :</strong> ${data.get("objet")}</p>
+            <h3>Lettre de Motivation (Modèle Simple)</h3>
+            <p>${data.get("corps")}</p>
+          </div>
+        `;
+      }
+
+      document.getElementById("apercu-lettre").innerHTML = lettreContent;
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function telechargerLettrePDF() {
+      const element = document.getElementById("apercu-lettre");
+      const options = {
+        margin:       0.5,
+        filename:     'ma_lettre_de_motivation.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(options).from(element).save();
+    }
+  </script>
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const modeleChoisi = params.get("modele");
+      if (modeleChoisi) {
+        document.querySelector('select[name="modele"]').value = modeleChoisi;
+      }
+    };
+  </script>
+  <script>
+    const form = document.querySelector("form");
+  
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedData = JSON.parse(localStorage.getItem("lettreData") || "{}");
+      for (const [key, value] of Object.entries(savedData)) {
+        const input = form.elements[key];
+        if (input) input.value = value;
+      }
+    });
+  
+    form.addEventListener("input", () => {
+      const data = {};
+      for (const input of form.elements) {
+        if (input.name) {
+          data[input.name] = input.value;
+        }
+      }
+      localStorage.setItem("lettreData", JSON.stringify(data));
+    });
+    </script>
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <button type="button" onclick="generatePDF()">Télécgarger le PDF</button>
+  <script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+  
+      // Récupérer les données du formulaire
+      const form = document.querySelector("form");
+      let data = "";
+      for (const input of form.elements) {
+        if (input.name && input.value) {
+          data += `${input.name}: ${input.value}\n`;
+        }
+      }
+  
+      // Ajouter les données au PDF
+      doc.text(data, 10, 10);
+  
+      // Télécharger le fichier PDF
+      doc.save("mon_lettre.pdf"); // Ou mon_Lettre.pdf pour la lettre
+    }
+  </script>
+  <!-- Ajoute ce script à la fin de la page -->
+<script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+  
+      // Récupérer les données du formulaire
+      const form = document.querySelector("form");
+      let data = '';
+      
+      // Récupérer toutes les données du formulaire
+      for (const input of form.elements) {
+        if (input.name && input.value) {
+          data += `${input.name}: ${input.value}\n`;
+        }
+      }
+  
+      if (data === '') {
+        alert('Veuillez remplir les champs avant de générer le PDF.');
+        return;
+      }
+  
+      // Ajouter les données au PDF
+      doc.text(data, 10, 10);
+  
+      // Vérifier si les données sont bien ajoutées
+      console.log("Données du formulaire : ", data);
+  
+      // Télécharger le fichier PDF
+      doc.save("mon_lettre.pdf");   }
+  </script>
+  
+
+
+
+
+  <!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choisir un modèle de lettre</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border: 2px solid #007bff;
+    }
+
+    .preview {
+      height: 150px;
+      background: linear-gradient(to bottom right, #ddd, #eee);
+      margin-bottom: 15px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #333;
+      font-size: 1.2rem;
+      position: relative;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Choisissez un modèle de lettre</h1>
+  <div class="back-btn">
+    <a href="index.html">← Retour à l'accueil</a>
+  </div>
+  <div class="gallery">
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/007bff/ffffff?text=Modèle+Formel" alt="Modèle Formel">
+      </div>
+      <div class="description">
+        Un modèle formel, parfait pour des lettres de motivation ou des candidatures professionnelles.
+      </div>
+      <a href="lettre.html?modele=formel" class="btn">Utiliser ce modèle</a>
+    </div>
+    
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/ffdddd/ffffff?text=Modèle+Créatif" alt="Modèle Créatif">
+      </div>
+      <div class="description">
+        Modèle créatif pour ceux qui cherchent à se démarquer, idéal pour des secteurs artistiques.
+      </div>
+      <a href="lettre.html?modele=creatif" class="btn">Utiliser ce modèle</a>
+    </div>
+    
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/f8f9fa/333333?text=Modèle+Simple" alt="Modèle Simple">
+      </div>
+      <div class="description">
+        Un modèle simple et élégant, adapté pour tout type de correspondance professionnelle.
+      </div>
+      <a href="lettre.html?modele=simple" class="btn">Utiliser ce modèle</a>
+    </div>
+  </div>
+
+</body>
+</html>
+
+</body>
+</html>

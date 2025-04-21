@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Création de CV</title>
+  <style>
+
+
+
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      max-width: 800px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      padding: 15px;
+      width: 100%;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Créer votre CV</h1>
+        <form id="cv-form" onsubmit="genererCV(event)">
+
+      <label>Nom :</label>
+      <input type="text" name="nom" required />
+
+      <label>Prénom :</label>
+      <input type="text" name="prenom" required />
+
+      <label>Email :</label>
+      <input type="email" name="email" required />
+
+      <label>Téléphone :</label>
+      <input type="text" name="telephone" required />
+
+      <label>Adresse :</label>
+      <input type="text" name="adresse" />
+
+      <label>Profil personnel :</label>
+      <textarea name="profil" rows="4"></textarea>
+
+      <label>Nationnalité:</label>
+       <textarea name="Nationnalité" rows="2"></textarea>
+
+      <label>Expériences professionnelles :</label>
+      <textarea name="experiences" rows="4" placeholder="Ex : Développeur Web chez XYZ, 2022-2024"></textarea>
+
+      <label>Formations :</label>
+      <textarea name="formations" rows="4"></textarea>
+
+      <label>Compétences :</label>
+      <textarea name="competences" rows="3" placeholder="Ex : HTML, CSS, JavaScript..."></textarea>
+
+      <label>Langues :</label>
+      <textarea name="langues" rows="2"></textarea>
+
+      <label>Centres d’intérêt :</label>
+      <textarea name="interets" rows="2"></textarea>
+
+      <button type="submit">Générer mon CV</button>
+
+    </form>
+
+  </div>
+<script>
+    function genererCV(event) {
+      event.preventDefault();
+  
+      const form = document.getElementById("cv-form");
+      const data = new FormData(form);
+  
+      const result = `
+        <div style="background:#fff; padding:20px; border-radius:10px;">
+          <h2>${data.get("prenom")} ${data.get("nom")}</h2>
+          <p><strong>Email :</strong> ${data.get("email")}</p>
+          <p><strong>Téléphone :</strong> ${data.get("telephone")}</p>
+          <p><strong>Adresse :</strong> ${data.get("adresse")}</p>
+          <h3>Profil</h3><p>${data.get("profil")}</p>
+          <h3>Expériences</h3><p>${data.get("experiences")}</p>
+          <h3>Formations</h3><p>${data.get("formations")}</p>
+          <h3>Compétences</h3><p>${data.get("competences")}</p>
+          <h3>Langues</h3><p>${data.get("langues")}</p>
+          <h3>Centres d’intérêt</h3><p>${data.get("interets")}</p>
+        </div>
+      `;
+  
+      document.getElementById("apercu-cv").innerHTML = result;
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+  </script>
+    <div id="apercu-cv" style="margin-top: 50px;"></div>
+  <script>
+    function telechargerPDF() {
+      const element = document.getElementById("apercu-cv");
+      const options = {
+        margin:       0.5,
+        filename:     'mon_cv.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2 },
+        jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+      };
+      html2pdf().set(options).from(element).save();
+    }
+  </script>
+  <script>
+    window.onload = function () {
+      const params = new URLSearchParams(window.location.search);
+      const modeleChoisi = params.get("modele");
+      if (modeleChoisi) {
+        document.querySelector('select[name="modele"]').value = modeleChoisi;
+      }
+    };
+  </script>
+  <script>
+    const form = document.querySelector("form");
+  
+    // ✅ Charger les données sauvegardées si elles existent
+    window.addEventListener("DOMContentLoaded", () => {
+      const savedData = JSON.parse(localStorage.getItem("cvData") || "{}");
+      for (const [key, value] of Object.entries(savedData)) {
+        const input = form.elements[key];
+        if (input) input.value = value;
+      }
+    });
+  
+    form.addEventListener("input", () => {
+      const data = {};
+      for (const input of form.elements) {
+        if (input.name) {
+          data[input.name] = input.value;
+        }
+      }
+      localStorage.setItem("cvData", JSON.stringify(data));
+    });
+  </script>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <button type="button" onclick="generatePDF()">Télécharger le PDF</button>
+  <script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+  
+      // Récupérer les données du formulaire
+      const form = document.querySelector("form");
+      let data = "";
+      for (const input of form.elements) {
+        if (input.name && input.value) {
+          data += `${input.name}: ${input.value}\n`;
+        }
+      }
+  
+      // Ajouter les données au PDF
+      doc.text(data, 10, 10);
+  
+      // Télécharger le fichier PDF
+      doc.save("mon_CV.pdf"); // Ou mon_Lettre.pdf pour la lettre
+    }
+  </script>
+  <!-- Ajoute ce script à la fin de la page -->
+<script>
+    function generatePDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+  
+      // Récupérer les données du formulaire
+      const form = document.querySelector("form");
+      let data = '';
+      
+      // Récupérer toutes les données du formulaire
+      for (const input of form.elements) {
+        if (input.name && input.value) {
+          data += `${input.name}: ${input.value}\n`;
+        }
+      }
+  
+      if (data === '') {
+        alert('Veuillez remplir les champs avant de générer le PDF.');
+        return;
+      }
+  
+      // Ajouter les données au PDF
+      doc.text(data, 10, 10);
+  
+      // Vérifier si les données sont bien ajoutées
+      console.log("Données du formulaire : ", data);
+  
+      // Télécharger le fichier PDF
+      doc.save("mon_CV.pdf");  // Ou mon_Lettre.pdf pour la lettre
+    }
+  </script>
+  
+  <!DOCTYPE html>
+  <html lang="fr">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Choisir un modèle de CV</title>
+    <style>
+      body {
+        font-family: 'Arial', sans-serif;
+        background: #f4f4f4;
+        margin: 0;
+        padding: 20px;
+      }
+  
+      h1 {
+        text-align: center;
+        font-size: 2rem;
+        color: #333;
+        margin-bottom: 30px;
+      }
+  
+      .back-btn {
+        text-align: center;
+        margin-bottom: 20px;
+      }
+  
+      .back-btn a {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #6c757d;
+        color: white;
+        border-radius: 8px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+      }
+  
+      .back-btn a:hover {
+        background: #5a6268;
+      }
+  
+      .gallery {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+      }
+  
+      .card {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+        border: 2px solid transparent;
+      }
+  
+      .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        border: 2px solid #28a745;
+      }
+  
+      .preview {
+        height: 150px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        overflow: hidden;
+      }
+  
+      .preview img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 5px;
+      }
+  
+      .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        background: #28a745;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        text-decoration: none;
+        font-size: 1rem;
+        margin-top: 15px;
+        transition: background-color 0.3s ease;
+      }
+  
+      .btn:hover {
+        background: #1e7e34;
+      }
+  
+      .description {
+        font-size: 0.9rem;
+        color: #777;
+        margin-top: 10px;
+      }
+  
+      @media (max-width: 480px) {
+        body {
+          padding: 10px;
+        }
+  
+        .btn {
+          font-size: 0.9rem;
+          padding: 10px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+  
+    <div class="back-btn">
+      <a href="index.html">← Retour à l'accueil</a>
+    </div>
+  
+    <h1>Choisissez un modèle de CV</h1>
+  
+    <div class="gallery">
+      <div class="card">
+        <div class="preview">
+          <img src="https://via.placeholder.com/250x150/007bff/ffffff?text=Modèle+Professionnel" alt="Modèle Professionnel">
+        </div>
+        <div class="description">
+          Un modèle structuré et professionnel, idéal pour des candidatures sérieuses.
+        </div>
+        <a href="cv.html?modele=pro" class="btn" aria-label="Utiliser le modèle professionnel">Utiliser ce modèle</a>
+      </div>
+      
+      <div class="card">
+        <div class="preview">
+          <img src="https://via.placeholder.com/250x150/17a2b8/ffffff?text=Modèle+Moderne" alt="Modèle Moderne">
+        </div>
+        <div class="description">
+          Design moderne et dynamique pour se démarquer dans des secteurs créatifs.
+        </div>
+        <a href="cv.html?modele=moderne" class="btn" aria-label="Utiliser le modèle moderne">Utiliser ce modèle</a>
+      </div>
+      
+      <div class="card">
+        <div class="preview">
+          <img src="https://via.placeholder.com/250x150/f8f9fa/333333?text=Modèle+Classique" alt="Modèle Classique">
+        </div>
+        <div class="description">
+          Un modèle classique et élégant, parfait pour toutes les industries.
+        </div>
+        <a href="cv.html?modele=classique" class="btn" aria-label="Utiliser le modèle classique">Utiliser ce modèle</a>
+      </div>
+    </div>
+  
+  </body>
+  </html>
+  
+
+
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choisir un modèle de lettre</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border: 2px solid #007bff;
+    }
+
+    .preview {
+      height: 150px;
+      background: linear-gradient(to bottom right, #ddd, #eee);
+      margin-bottom: 15px;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      color: #333;
+      font-size: 1.2rem;
+      position: relative;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #0056b3;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 10px;
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Choisissez un modèle de lettre</h1>
+
+  <div class="gallery">
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/007bff/ffffff?text=Modèle+Formel" alt="Modèle Formel">
+      </div>
+      <div class="description">
+        Un modèle formel, parfait pour des lettres de motivation ou des candidatures professionnelles.
+      </div>
+      <a href="lettre.html?modele=formel" class="btn">Utiliser ce modèle</a>
+    </div>
+    
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/ffdddd/ffffff?text=Modèle+Créatif" alt="Modèle Créatif">
+      </div>
+      <div class="description">
+        Modèle créatif pour ceux qui cherchent à se démarquer, idéal pour des secteurs artistiques.
+      </div>
+      <a href="lettre.html?modele=creatif" class="btn">Utiliser ce modèle</a>
+    </div>
+    
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/f8f9fa/333333?text=Modèle+Simple" alt="Modèle Simple">
+      </div>
+      <div class="description">
+        Un modèle simple et élégant, adapté pour tout type de correspondance professionnelle.
+      </div>
+      <a href="lettre.html?modele=simple" class="btn">Utiliser ce modèle</a>
+    </div>
+  </div>
+
+</body>
+</html>

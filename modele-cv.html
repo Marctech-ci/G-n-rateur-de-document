@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Choisir un modèle de CV</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 2rem;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    .back-btn {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .back-btn a {
+      display: inline-block;
+      padding: 10px 20px;
+      background: #6c757d;
+      color: white;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.3s ease;
+    }
+
+    .back-btn a:hover {
+      background: #5a6268;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      border: 2px solid #28a745;
+    }
+
+    .preview {
+      height: 150px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 5px;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 1rem;
+      margin-top: 15px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn:hover {
+      background: #1e7e34;
+    }
+
+    .description {
+      font-size: 0.9rem;
+      color: #777;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 10px;
+      }
+
+      .btn {
+        font-size: 0.9rem;
+        padding: 10px 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="back-btn">
+    <a href="dashboard.html">← Retour à l'accueil</a>
+  </div>
+
+  <h1>Choisissez un modèle de CV</h1>
+
+  <div class="gallery">
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/007bff/ffffff?text=Modèle+Professionnel" alt="Modèle Professionnel">
+      </div>
+      <div class="description">
+        Un modèle structuré et professionnel, idéal pour des candidatures sérieuses.
+      </div>
+      <a href="cv.html?modele=pro" class="btn" aria-label="Utiliser le modèle professionnel">Utiliser ce modèle</a>
+    </div>
+    
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/17a2b8/ffffff?text=Modèle+Moderne" alt="Modèle Moderne">
+      </div>
+      <div class="description">
+        Design moderne et dynamique pour se démarquer dans des secteurs créatifs.
+      </div>
+      <a href="cv.html?modele=moderne" class="btn" aria-label="Utiliser le modèle moderne">Utiliser ce modèle</a>
+    </div>
+    
+    <div class="card">
+      <div class="preview">
+        <img src="https://via.placeholder.com/250x150/f8f9fa/333333?text=Modèle+Classique" alt="Modèle Classique">
+      </div>
+      <div class="description">
+        Un modèle classique et élégant, parfait pour toutes les industries.
+      </div>
+      <a href="cv.html?modele=classique" class="btn" aria-label="Utiliser le modèle classique">Utiliser ce modèle</a>
+    </div>
+  </div>
+
+</body>
+</html>
